@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/secure_connect_scan"
+        android:icon="@drawable/connect_net_x2"
+        android:title="connect"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/insecure_connect_scan"
+        app:showAsAction="never"
+        android:title="re_connect"/>
+
+    <item
+        android:id="@+id/discoverable"
+        app:showAsAction="never"
+        android:title="disconnection"/>
+</menu>
