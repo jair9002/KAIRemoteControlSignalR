@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    void connect() {
+    void connect() { //test
         Platform.loadPlatformComponent(new AndroidPlatformComponent());
         Credentials credentials = new Credentials() {
             @Override
