@@ -32,6 +32,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.example.kaiactivitypackage.Main"
+            android:screenOrientation="landscape"></activity>
+        <activity android:name="com.example.kaiactivitypackage.AllPlayActivity"
+            android:screenOrientation="landscape"></activity>
+        <activity android:name="com.example.kaiactivitypackage.ScenarioPlay"
+            android:screenOrientation="landscape"></activity>
+        <activity android:name="com.example.kaiactivitypackage.DetailPlayActivity"
+            android:screenOrientation="landscape"></activity>
+        <activity android:name="com.example.kaiactivitypackage.WaitActicity"
+            android:screenOrientation="landscape"></activity>
+
     </application>
 
 </manifest>
