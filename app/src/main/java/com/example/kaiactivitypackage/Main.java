@@ -34,19 +34,28 @@ public class Main extends AppCompatActivity {
     SignalRConnect signalRConnect;
     FragmentManager fm;
     FragmentTransaction ft;
+    Button backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kai_main);
 
+        getSupportActionBar().setTitle("메인화면");
         fm = getSupportFragmentManager();
         ft =fm.beginTransaction();
 
+        backBtn=findViewById(R.id.back_main);
 
-
-
-
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(signalRConnect != null) {
+                    signalRConnect.send("BackMain");
+                    change_to_frame("Main");
+                }
+            }
+        });
     }//onCreate end
 
     // 지구본 클릭해서 ip주소랑 포트 입력하고 인터넷 연결
@@ -111,19 +120,23 @@ public class Main extends AppCompatActivity {
         switch (choosenScenario){
             case "Main" : {
                fm.beginTransaction().replace(R.id.controlFrmaeLayout, new MainFragment(signalRConnect)).commit();
+               getSupportActionBar().setTitle("메인화면");
                 break;
             }
             case "MainAllPlay": {
                 fm.beginTransaction().replace(R.id.controlFrmaeLayout, new AllPlayActivity(signalRConnect)).commit();
+                getSupportActionBar().setTitle("전체플레이");
                 break;
             }
             case "MainScenarioPlay": {
                 fm.beginTransaction().replace(R.id.controlFrmaeLayout, new ScenarioPlay(signalRConnect)).commit();
+                getSupportActionBar().setTitle("시나리오별 플레이");
                 break;
             }
             case "MainDetailPlay": {
-                Log.d("선택","재");
+
                 fm.beginTransaction().replace(R.id.controlFrmaeLayout, new DetailPlayActivity(signalRConnect)).commit();
+                getSupportActionBar().setTitle("세부 항목별 플레이");
                 break;
             }
             case "MainWait": {

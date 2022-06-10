@@ -1,11 +1,13 @@
 package com.example.kaiactivitypackage;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +22,7 @@ public class ScenarioPlay extends Fragment {
     Button scenarioS1;
     Button scenarioS2;
     Button scenarioS3;
-    Button backBtn;
+    Button scenarioButton[];
     Main main;
     SignalRConnect signalRConnect;
 
@@ -40,37 +42,35 @@ public class ScenarioPlay extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.activity_scenario_play, container, false);
+        scenarioButton = new Button[3];
 
-        scenarioS1 = viewGroup.findViewById(R.id.scenarioButton1);
-        scenarioS2 = viewGroup.findViewById(R.id.scenarioButton2);
-        scenarioS3 = viewGroup.findViewById(R.id.scenarioButton3);
-        backBtn = viewGroup.findViewById(R.id.back_main);
+        scenarioButton[0] = viewGroup.findViewById(R.id.scenarioButton1);
+        scenarioButton[1] = viewGroup.findViewById(R.id.scenarioButton2);
+        scenarioButton[2] = viewGroup.findViewById(R.id.scenarioButton3);
 
-        backBtn.setOnClickListener(new View.OnClickListener() {
+        scenarioButton[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signalRConnect.send("BackMain");
-                main.change_to_frame("Main");
-            }
-        });
-
-        scenarioS1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                Toast.makeText(getContext(),"시나리오 1번 선택",Toast.LENGTH_SHORT).show();
+                scenarioButtonColorRadio(scenarioButton[0]);
                 signalRConnect.send("Scenario1");
             }
         });
 
-        scenarioS2.setOnClickListener(new View.OnClickListener() {
+        scenarioButton[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getContext(),"시나리오 2번 선택",Toast.LENGTH_SHORT).show();
+                scenarioButtonColorRadio(scenarioButton[1]);
                 signalRConnect.send("Scenario2");
             }
         });
 
-        scenarioS3.setOnClickListener(new View.OnClickListener() {
+        scenarioButton[2].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getContext(),"시나리오 3번 선택",Toast.LENGTH_SHORT).show();
+                scenarioButtonColorRadio(scenarioButton[2]);
                 signalRConnect.send("Scenario3");
             }
         });
@@ -79,4 +79,17 @@ public class ScenarioPlay extends Fragment {
 
         return viewGroup;
     }//onCreateView end
+
+    public void scenarioButtonColorRadio(Button scenarioBtn){
+        for(int i=0;i<3;i++) {
+            if (scenarioBtn == scenarioButton[i]){
+                scenarioBtn.setTextColor(Color.BLACK);
+                scenarioBtn.setBackgroundColor(Color.WHITE);
+                continue;
+            }
+            scenarioButton[i].setTextColor(Color.WHITE);
+            scenarioButton[i].setBackgroundColor(Color.BLUE);
+
+        }//for end
+    }//sBC end
 }

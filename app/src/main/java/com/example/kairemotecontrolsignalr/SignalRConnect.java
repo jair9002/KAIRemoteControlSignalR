@@ -52,12 +52,16 @@ public class SignalRConnect implements Serializable{
         hubConnection.start().blockingAwait();
 
         // Host, Unity
-        hubConnection.send("SendCommandTo", "1", new String[] {"Host", "Unity"}, "SceneChange", "2");
+        hubConnection.send("SendCommandTo", "1", new String[] {"Host", "Unity"}, "connect", "");
 
     }
 
     public void send(String msg){
-        hubConnection.send("SendCommandTo", "1", new String[] {"Host", "Unity"}, "SceneChange",msg);
+        hubConnection.send("SendCommandTo", "1", new String[] {"Host", "Unity"},  msg, "");
+    }
+
+    public void send(String msg, String detailValue){
+        hubConnection.send("SendCommandTo", "1", new String[] {"Host", "Unity"},  msg, detailValue);
     }
 
     public void disconnect() { //disconnection server

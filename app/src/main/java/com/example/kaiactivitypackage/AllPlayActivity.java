@@ -20,7 +20,7 @@ import com.example.kairemotecontrolsignalr.SignalRConnect;
 
 
 public class AllPlayActivity extends Fragment {
-    Button backBtn; //메인화면으로 이동
+
     SignalRConnect signalRConnect;
     Main main;
 
@@ -40,15 +40,7 @@ public class AllPlayActivity extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.activity_all_play, container, false);
 
-        backBtn = viewGroup.findViewById(R.id.back_main);
 
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signalRConnect.send("BackMain");
-                main.change_to_frame("Main");
-            }
-        });
 
         getChildFragmentManager().beginTransaction().replace(R.id.play_frame, new PlayFragment(signalRConnect)).commit();
 

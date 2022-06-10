@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical">
 
@@ -15,18 +15,21 @@
             android:id="@+id/skip_previous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:src="@drawable/skip_previous" />
 
         <ImageButton
             android:id="@+id/play_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:src="@drawable/play_arrow" />
 
         <ImageButton
             android:id="@+id/skip_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:src="@drawable/skip_next" />
 
     </LinearLayout>
@@ -59,12 +62,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/kor_button"
+            android:layout_marginLeft="20dp"
             android:text="KOR"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/eng_button"
+            android:layout_marginLeft="20dp"
             android:text="ENG"/>
 
     </LinearLayout>

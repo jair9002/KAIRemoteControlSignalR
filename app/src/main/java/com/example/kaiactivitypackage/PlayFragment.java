@@ -27,8 +27,14 @@ public class PlayFragment extends Fragment {
     Button korBtn;
     Button engBtn;
     SignalRConnect signalRConnect;
+    Boolean play_pause_toggle;
+    Boolean mute_toggle ;
+
+    //consturctor
     PlayFragment(SignalRConnect signalRConnect){
         this.signalRConnect = signalRConnect;
+        play_pause_toggle = true;
+        mute_toggle = true;
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,8 +68,18 @@ public class PlayFragment extends Fragment {
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signalRConnect.send("PlayButton");
-                //pause 버튼 만들어 주세요
+                if(play_pause_toggle) {
+                    signalRConnect.send("PlayButton");
+                    //pause 버튼 만들어 주세요
+                    play_pause_toggle=false;
+                    playBtn.setImageResource(R.drawable.pause);
+                }else{
+                    signalRConnect.send("PauseButton");
+                    play_pause_toggle=true;
+                    playBtn.setImageResource(R.drawable.play_arrow);
+                }
+
+
             }
         });
         nextBtn.setOnClickListener(new View.OnClickListener() {
@@ -73,35 +89,56 @@ public class PlayFragment extends Fragment {
             }
         });
 
-        /*
-        skipPreBtn.setOnClickListener(new View.OnClickListener() {
+        //volume controller
+        voulmeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
             }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Toast.makeText(getContext(),Integer.toString(voulmeSeekBar.getProgress()),Toast.LENGTH_SHORT).show();
+                signalRConnect.send("Volume", Integer.toString(voulmeSeekBar.getProgress()));
+            }
         });
-        */
+
 
         muteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signalRConnect.send("Mute");
-                //Mute on , Mute off 로 분리해서 생각해야해
+                if(mute_toggle) {
+                    signalRConnect.send("MuteOn");
+                    muteBtn.setImageResource(R.drawable.volumen_off);
+                    mute_toggle=false;
+
+                }else{
+                    signalRConnect.send("MuteOff");
+                    muteBtn.setImageResource(R.drawable.volume_on);
+                    mute_toggle=true;
+                }
             }
         });
         korBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getContext(),"한국어 버전",Toast.LENGTH_SHORT).show();
                 signalRConnect.send("KORPlay");
             }
         });
+
         engBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getContext(),"영어 버전",Toast.LENGTH_SHORT).show();
                 signalRConnect.send("ENGPlay");
             }
         });
-
 
         return viewGroup;
     }
