@@ -55,9 +55,8 @@ public class PrototypeActivity extends AppCompatActivity {
             }
         });
 
+    }//onCreate end
 
-
-    }
     // 지구본 클릭해서 ip주소랑 포트 입력하고 인터넷 연결
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -66,7 +65,6 @@ public class PrototypeActivity extends AppCompatActivity {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
                 alert.setTitle("IP 주소 입력");
-
 
                 LinearLayout linearLayout = new LinearLayout(this);
                 linearLayout.setOrientation(LinearLayout.VERTICAL);

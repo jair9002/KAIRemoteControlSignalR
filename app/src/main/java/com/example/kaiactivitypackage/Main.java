@@ -1,13 +1,27 @@
 package com.example.kaiactivitypackage;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.kairemotecontrolsignalr.R;
+import com.example.kairemotecontrolsignalr.SignalRConnect;
 
 public class Main extends AppCompatActivity {
     public static final int REQUEST_CODE_AllPlay =101;
@@ -15,51 +29,111 @@ public class Main extends AppCompatActivity {
     public static final int REQUEST_CODE_DetailPlay =103;
     public static final int REQUEST_CODE_Wait =104;
 
-    Button mainAllPlay;
-    Button mainScenarioPlay;
-    Button mainDetailPlay;
-    Button mainWait;
+    ActivityResultLauncher<Intent> activityResultLauncher;
+
+    SignalRConnect signalRConnect;
+    FragmentManager fm;
+    FragmentTransaction ft;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kai_main);
 
-        mainAllPlay = (Button) findViewById(R.id.mainAllPlay);
-        mainAllPlay.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                Intent intent = new Intent(getApplicationContext(), AllPlayActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_AllPlay);
-            }
-        }); //end cooditoon listner
+        fm = getSupportFragmentManager();
+        ft =fm.beginTransaction();
 
-        mainScenarioPlay = (Button) findViewById(R.id.mainScenarioPlay);
-        mainScenarioPlay.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                Intent intent = new Intent(getApplicationContext(), ScenarioPlay.class);
-                startActivityForResult(intent, REQUEST_CODE_ScenarioPlay);
-            }
-        }); //end cooditoon listner
 
-        mainDetailPlay = (Button) findViewById(R.id.mainDetailPlay);
-        mainDetailPlay.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                Intent intent = new Intent(getApplicationContext(), DetailPlayActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_Wait);
-            }
-        }); //end cooditoon listner
 
-        mainWait = (Button) findViewById(R.id.mainWait);
-        mainWait.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                Intent intent = new Intent(getApplicationContext(), WaitActicity.class);
-                startActivityForResult(intent, REQUEST_CODE_DetailPlay);
+
+
+    }//onCreate end
+
+    // 지구본 클릭해서 ip주소랑 포트 입력하고 인터넷 연결
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.secure_connect_scan: {
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+                alert.setTitle("IP 주소 입력");
+
+                LinearLayout linearLayout = new LinearLayout(this);
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+                final TextView ipText = new TextView(this);
+                ipText.setText("IP Address");
+                linearLayout.addView(ipText);
+
+                final EditText address_input = new EditText(this);
+                linearLayout.addView(address_input);
+
+                final TextView portText = new TextView(this);
+                portText.setText("Port");
+                linearLayout.addView(portText);
+
+                final EditText port_input = new EditText(this);
+                linearLayout.addView(port_input);
+
+                alert.setView(linearLayout);
+
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        signalRConnect = new SignalRConnect();
+                        //address_input.setText("172.30.1.63");
+                        //port_input.setText("58486");
+                        String ip_value = address_input.getText().toString();
+                        String port_value = port_input.getText().toString();
+
+                        if(ip_value ==null &&port_value == null){
+                            signalRConnect.connect("172.30.1.146","58486");
+                        }
+                        signalRConnect.connect(ip_value,port_value);
+                        fm.beginTransaction().replace(R.id.controlFrmaeLayout, new MainFragment(signalRConnect)).commit();
+
+                    }
+                }); //setPositiveButton end
+                alert.show();
             }
-        }); //end cooditoon listner
+        } //switch end
+        return false;
+    } //onOptionsItemSelected end
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.prototype_menu, menu);
+        return true;
+    }
+
+    public void change_to_frame(String choosenScenario){
+        switch (choosenScenario){
+            case "Main" : {
+               fm.beginTransaction().replace(R.id.controlFrmaeLayout, new MainFragment(signalRConnect)).commit();
+                break;
+            }
+            case "MainAllPlay": {
+                fm.beginTransaction().replace(R.id.controlFrmaeLayout, new AllPlayActivity(signalRConnect)).commit();
+                break;
+            }
+            case "MainScenarioPlay": {
+                fm.beginTransaction().replace(R.id.controlFrmaeLayout, new ScenarioPlay(signalRConnect)).commit();
+                break;
+            }
+            case "MainDetailPlay": {
+                Log.d("선택","재");
+                fm.beginTransaction().replace(R.id.controlFrmaeLayout, new DetailPlayActivity(signalRConnect)).commit();
+                break;
+            }
+            case "MainWait": {
+                fm.beginTransaction().replace(R.id.controlFrmaeLayout, new PlayFragment(signalRConnect)).commit();
+                break;
+            }
+
+        }
 
 
     }
+
 }

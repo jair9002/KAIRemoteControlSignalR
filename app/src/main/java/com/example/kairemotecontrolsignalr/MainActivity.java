@@ -18,6 +18,8 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.kaiactivitypackage.Main;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         protobutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),PrototypeActivity.class);
+                Intent intent = new Intent(getApplicationContext(), Main.class);
                 startActivity(intent);
             }
         });

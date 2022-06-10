@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+
+    android:orientation="horizontal"
+    >
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/mainAllPlay"
+        android:textColor="#FFFFFF"
+        android:background="#F44336"
+        android:layout_gravity="center"
+        android:text="전체플레이"
+        android:layout_margin="20dp"
+        />
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/mainScenarioPlay"
+        android:textColor="#FFFFFF"
+        android:background="#F6E33E"
+        android:text="시나리오별 플레이"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        />
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:background="#4CAF50"
+        android:id="@+id/mainDetailPlay"
+        android:textColor="#FFFFFF"
+        android:layout_gravity="center"
+        android:text="세부 항목 플레이"
+        android:layout_margin="20dp"
+        />
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/mainWait"
+        android:textColor="#FFFFFF"
+        android:background="#9C27B0"
+        android:layout_gravity="center"
+        android:text="대기화면"
+        android:layout_margin="20dp"
+        />
+
+
+</LinearLayout>
