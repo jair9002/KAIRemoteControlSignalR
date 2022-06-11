@@ -31,7 +31,7 @@ public class PlayFragment extends Fragment {
     Boolean mute_toggle ;
 
     //consturctor
-    PlayFragment(SignalRConnect signalRConnect){
+    public PlayFragment(SignalRConnect signalRConnect){
         this.signalRConnect = signalRConnect;
         play_pause_toggle = true;
         mute_toggle = true;
@@ -128,6 +128,7 @@ public class PlayFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(),"한국어 버전",Toast.LENGTH_SHORT).show();
+                korBtn.setBackgroundResource(R.drawable.button_setting);
                 signalRConnect.send("KORPlay");
             }
         });

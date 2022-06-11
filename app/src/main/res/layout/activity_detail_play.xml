@@ -16,6 +16,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:orientation="vertical">
 
             <Button
@@ -57,6 +58,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
                     android:orientation="vertical">
 
                     <Button
@@ -89,20 +91,21 @@
                         android:text="50"
                         android:id="@+id/detailPreset50"
                         />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="60"
                         android:id="@+id/detailPreset60"
                         />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:orientation="vertical">
+
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -126,6 +129,18 @@
                         android:layout_height="wrap_content"
                         android:text="100"
                         android:id="@+id/detailPreset100"
+                        />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="110"
+                        android:id="@+id/detailPreset110"
+                        />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="120"
+                        android:id="@+id/detailPreset120"
                         />
 
 

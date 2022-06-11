@@ -27,7 +27,7 @@ public class MainFragment extends Fragment {
     SignalRConnect signalRConnect;
     FragmentManager fm;
     FragmentTransaction ft;
-    Main main;
+    MainActivity main;
 
     public MainFragment(){
 
@@ -42,7 +42,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        main=(Main)getActivity();
+        main=(MainActivity) getActivity();
     }
 
 

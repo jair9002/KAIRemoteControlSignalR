@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
@@ -63,6 +64,10 @@ public class Main extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.secure_connect_scan: {
+
+                if(signalRConnect != null){
+                    signalRConnect.disconnect();
+                }
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
                 alert.setTitle("IP 주소 입력");
@@ -94,12 +99,14 @@ public class Main extends AppCompatActivity {
                         String ip_value = address_input.getText().toString();
                         String port_value = port_input.getText().toString();
 
-                        if(ip_value ==null &&port_value == null){
-                            signalRConnect.connect("172.30.1.146","58486");
-                        }
-                        signalRConnect.connect(ip_value,port_value);
-                        fm.beginTransaction().replace(R.id.controlFrmaeLayout, new MainFragment(signalRConnect)).commit();
-
+//                        if(ip_value ==null &&port_value == null){
+//                            signalRConnect.connect("172.30.1.146","58486");
+//                        }
+                        boolean connect = signalRConnect.connect(ip_value,port_value);
+                        //Toast.makeText(getActivity(),"인터넷이 연결되지 않음",Toast.LENGTH_SHORT).show();
+                        if(connect) {
+                            fm.beginTransaction().replace(R.id.controlFrmaeLayout, new MainFragment(signalRConnect)).commit();
+                        }else Toast.makeText(getApplicationContext(),"인터넷이 연결되지 않음",Toast.LENGTH_SHORT).show();
                     }
                 }); //setPositiveButton end
                 alert.show();

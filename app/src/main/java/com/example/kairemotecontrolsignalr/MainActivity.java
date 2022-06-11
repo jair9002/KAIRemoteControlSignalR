@@ -1,212 +1,164 @@
 package com.example.kairemotecontrolsignalr;
 
-
-import android.Manifest;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.example.kaiactivitypackage.Main;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import microsoft.aspnet.signalr.client.Credentials;
-import microsoft.aspnet.signalr.client.Platform;
-import microsoft.aspnet.signalr.client.SignalRFuture;
-import microsoft.aspnet.signalr.client.http.Request;
-import microsoft.aspnet.signalr.client.http.android.AndroidPlatformComponent;
-import microsoft.aspnet.signalr.client.hubs.HubConnection;
-import microsoft.aspnet.signalr.client.hubs.HubProxy;
-import microsoft.aspnet.signalr.client.hubs.SubscriptionHandler1;
-import microsoft.aspnet.signalr.client.hubs.SubscriptionHandler2;
-import microsoft.aspnet.signalr.client.transport.ClientTransport;
-import microsoft.aspnet.signalr.client.transport.ServerSentEventsTransport;
+import com.example.kaiactivitypackage.AllPlayActivity;
+import com.example.kaiactivitypackage.DetailPlayActivity;
+import com.example.kaiactivitypackage.MainFragment;
+import com.example.kaiactivitypackage.PlayFragment;
+import com.example.kaiactivitypackage.ScenarioPlay;
+import com.example.kairemotecontrolsignalr.R;
+import com.example.kairemotecontrolsignalr.SignalRConnect;
 
 public class MainActivity extends AppCompatActivity {
-    EditText username, message, send_message;
-    Button connection, disconnection, send, protobutton;
-    Spinner users;
-    HubConnection hubConnection; //Do the signalR definitions
-    HubProxy hubProxy;
-    Handler mHandler = new Handler(); //listener
-    List<User> userList;
-    List<String> user_names;
-    User sender;
-    Context cx;
+    public static final int REQUEST_CODE_AllPlay =101;
+    public static final int REQUEST_CODE_ScenarioPlay =102;
+    public static final int REQUEST_CODE_DetailPlay =103;
+    public static final int REQUEST_CODE_Wait =104;
+
+    ActivityResultLauncher<Intent> activityResultLauncher;
+
+    SignalRConnect signalRConnect;
+    FragmentManager fm;
+    FragmentTransaction ft;
+    Button backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_kai_main);
 
-        protobutton = (Button) findViewById(R.id.protobutton);
-        username = (EditText) findViewById(R.id.putText);
-        message = (EditText) findViewById(R.id.edit_message);
-        send_message = (EditText) findViewById(R.id.messageScreen);
-        connection = (Button) findViewById(R.id.btnconnect);
-        disconnection = (Button) findViewById(R.id.btndisconnect);
-        send = (Button) findViewById(R.id.send_message);
-        users = (Spinner) findViewById(R.id.userList);
-        cx = this;
+        getSupportActionBar().setTitle("메인화면");
+        fm = getSupportFragmentManager();
+        ft =fm.beginTransaction();
 
-        String[] permission_list = {
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.BLUETOOTH_ADMIN,
-                Manifest.permission.BLUETOOTH,
-                Manifest.permission.INTERNET,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_WIFI_STATE
-                // Manifest.permission.BLUETOOTH_CONNECT
-        };
-        ActivityCompat.requestPermissions(MainActivity.this, permission_list, 1);
+        backBtn=findViewById(R.id.back_main);
 
-        protobutton.setOnClickListener(new View.OnClickListener() {
+        backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Main.class);
-                startActivity(intent);
-            }
-        });
-
-
-        users.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position > 0) {
-                    sender = userList.get(position - 1);
-                    send.setEnabled(true);
-                } else {
-                    send.setEnabled(false);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!message.getText().toString().trim().equals("") && sender != null) { // WebApi Methods
-                    hubProxy.invoke("sendMessage", new Object[]{message.getText().toString().trim(), sender.connectionID
-                    });//we have parameterized what we want in the web API method
+                if(signalRConnect != null) {
+                    signalRConnect.send("BackMain");
+                    change_to_frame("Main");
                 }
             }
         });
-        connection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                connect(); // connect chat server
-            }
-        });
-        disconnection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                disconnect(); //disconnect chat server
-            }
-        });
+    }//onCreate end
 
+    // 지구본 클릭해서 ip주소랑 포트 입력하고 인터넷 연결
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.secure_connect_scan: {
+
+                if(signalRConnect != null){
+                    signalRConnect.disconnect();
+                }
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+                alert.setTitle("IP 주소 입력");
+
+                LinearLayout linearLayout = new LinearLayout(this);
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+                final TextView ipText = new TextView(this);
+                ipText.setText("IP Address");
+                linearLayout.addView(ipText);
+
+                final EditText address_input = new EditText(this);
+                linearLayout.addView(address_input);
+
+                final TextView portText = new TextView(this);
+                portText.setText("Port");
+                linearLayout.addView(portText);
+
+                final EditText port_input = new EditText(this);
+                linearLayout.addView(port_input);
+
+                alert.setView(linearLayout);
+
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        signalRConnect = new SignalRConnect();
+                        //address_input.setText("172.30.1.63");
+                        //port_input.setText("58486");
+                        String ip_value = address_input.getText().toString();
+                        String port_value = port_input.getText().toString();
+
+//                        if(ip_value ==null &&port_value == null){
+//                            signalRConnect.connect("172.30.1.146","58486");
+//                        }
+                        boolean connect = signalRConnect.connect(ip_value,port_value);
+                        //Toast.makeText(getActivity(),"인터넷이 연결되지 않음",Toast.LENGTH_SHORT).show();
+                        if(connect) {
+                            fm.beginTransaction().replace(R.id.controlFrmaeLayout, new MainFragment(signalRConnect)).commit();
+                        }else Toast.makeText(getApplicationContext(),"인터넷이 연결되지 않음",Toast.LENGTH_SHORT).show();
+                    }
+                }); //setPositiveButton end
+                alert.show();
+            }
+        } //switch end
+        return false;
+    } //onOptionsItemSelected end
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.prototype_menu, menu);
+        return true;
     }
 
-    void connect() { //test
-        Platform.loadPlatformComponent(new AndroidPlatformComponent());
-        Credentials credentials = new Credentials() {
-            @Override
-            public void prepareRequest(Request request) {
-                request.addHeader("username", username.getText().toString().trim()); //get username
+    public void change_to_frame(String choosenScenario){
+        switch (choosenScenario){
+            case "Main" : {
+                fm.beginTransaction().replace(R.id.controlFrmaeLayout, new MainFragment(signalRConnect)).commit();
+                getSupportActionBar().setTitle("메인화면");
+                break;
             }
-        };
-        //String serverUrl = "https://server-mr5.conveyor.cloud/signalr"; // connect to signalr server
-        String serverUrl = "http://172.30.1.63:58486/signalr"; // connect to signalr server
-        hubConnection = new HubConnection(serverUrl);
-        //hubConnection.setCredentials(credentials);
-        hubConnection.connected(new Runnable() {
-            @Override
-            public void run() {
+            case "MainAllPlay": {
+                fm.beginTransaction().replace(R.id.controlFrmaeLayout, new AllPlayActivity(signalRConnect)).commit();
+                getSupportActionBar().setTitle("전체플레이");
+                break;
             }
-        });
-        String CLIENT_METHOD_BROADAST_MESSAGE = "getUserList"; // get webapi serv methods
-        //hubProxy = hubConnection.createHubProxy("chatHub"); // web api  necessary method name
-        ClientTransport clientTransport = new ServerSentEventsTransport((hubConnection.getLogger()));
-        SignalRFuture<Void> signalRFuture = hubConnection.start(clientTransport);
-        try {
-            signalRFuture.get();
-        } catch (InterruptedException | ExecutionException e) {
-            Log.e("SimpleSignalR", e.toString());
-            return;
+            case "MainScenarioPlay": {
+                fm.beginTransaction().replace(R.id.controlFrmaeLayout, new ScenarioPlay(signalRConnect)).commit();
+                getSupportActionBar().setTitle("시나리오별 플레이");
+                break;
+            }
+            case "MainDetailPlay": {
+
+                fm.beginTransaction().replace(R.id.controlFrmaeLayout, new DetailPlayActivity(signalRConnect)).commit();
+                getSupportActionBar().setTitle("세부 항목별 플레이");
+                break;
+            }
+            case "MainWait": {
+                fm.beginTransaction().replace(R.id.controlFrmaeLayout, new PlayFragment(signalRConnect)).commit();
+                break;
+            }
+
         }
-        hubProxy.on(CLIENT_METHOD_BROADAST_MESSAGE, new SubscriptionHandler1<String>() {
-            @Override
-            public void run(String s) {
-                try { // we added the list of connected users
-                    JSONArray jsonArray = new JSONArray(s);
-                    userList = new ArrayList<User>();
-                    user_names = new ArrayList<String>();
-                    user_names.add("Select User");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String username = jsonObject.getString("username");
-                        String connection_id = jsonObject.getString("connectionID");
-                        User user = new User(username, connection_id);
-                        userList.add(user);
-                        user_names.add(username);
-                    }
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(cx, android.R.layout.simple_list_item_1, user_names);
-                            adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
-                            users.setAdapter(adapter);
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, String.class);
-        hubProxy.on("sendMessage", new SubscriptionHandler2<String, String>() {
 
-            @Override
-            public void run(final String s, final String s2) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        send_message.setText(send_message.getText() + "\n" + s2 + " : " + s);
-                    }
-                });
-            }
-        }, String.class, String.class);
+
     }
-
-    void disconnect() { //disconnection server
-        hubConnection.stop();
-        userList.clear();
-        users.setAdapter(null);
-        send.setEnabled(false);
-        sender = null;
-    }
-
 
 }

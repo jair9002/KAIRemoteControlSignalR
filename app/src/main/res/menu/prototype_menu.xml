@@ -6,6 +6,7 @@
         android:id="@+id/secure_connect_scan"
         android:icon="@drawable/connect_net_x2"
         android:title="connect"
+
         app:showAsAction="ifRoom"/>
 
     <item

@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.kairemotecontrolsignalr.ButtonFragment;
+import com.example.kairemotecontrolsignalr.MainActivity;
 import com.example.kairemotecontrolsignalr.R;
 import com.example.kairemotecontrolsignalr.SignalRConnect;
 
@@ -22,7 +23,7 @@ import com.example.kairemotecontrolsignalr.SignalRConnect;
 public class AllPlayActivity extends Fragment {
 
     SignalRConnect signalRConnect;
-    Main main;
+    MainActivity main;
 
     public AllPlayActivity(SignalRConnect signalRConnect){
         this.signalRConnect=signalRConnect;
@@ -32,7 +33,7 @@ public class AllPlayActivity extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        main=(Main)getActivity();
+        main=(MainActivity) getActivity();
     }
 
     @Override
