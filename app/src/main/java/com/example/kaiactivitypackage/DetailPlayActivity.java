@@ -112,7 +112,7 @@ public class DetailPlayActivity extends Fragment {
                 public void onClick(View v) {
                     presetButtonColorRadio(preset_button[presetValue],preset_button.length);
                     changePresetImage(chooseScenarioNum,presetValue+1);
-                    signalRConnect.send("DetailPreset",Integer.toString((presetValue+1)*10));
+                    signalRConnect.send("DetailPreset","D"+Integer.toString((presetValue+1)*10));
                 }
             });
         }//for end
@@ -132,9 +132,9 @@ public class DetailPlayActivity extends Fragment {
                 scenarioBtn.setBackgroundColor(Color.WHITE);
                 continue;
             }
-            detailScenarioButton[i].setBackground(getResources().getDrawable(R.drawable.button_setting,null));
+            //detailScenarioButton[i].setBackground(getResources().getDrawable(R.drawable.button_setting,null));
             detailScenarioButton[i].setTextColor(Color.WHITE);
-            //detailScenarioButton[i].setBackgroundColor(Color.BLUE);
+            detailScenarioButton[i].setBackgroundColor(Color.BLUE);
 
         }//for end
     }//sBC end
@@ -146,9 +146,9 @@ public class DetailPlayActivity extends Fragment {
                 scenarioBtn.setBackgroundColor(Color.WHITE);
                 continue;
             }
-            preset_button[i].setBackground(getResources().getDrawable(R.drawable.button_setting,null));
+            //preset_button[i].setBackground(getResources().getDrawable(R.drawable.button_setting,null));
             preset_button[i].setTextColor(Color.WHITE);
-            //preset_button[i].setBackgroundColor(Color.BLUE);
+            preset_button[i].setBackgroundColor(Color.BLUE);
 
         }//for end
     }//pBC end
