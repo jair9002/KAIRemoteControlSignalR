@@ -97,8 +97,7 @@ public class ButtonFragment extends Fragment {
             Log.d("color",color);
             //Button button = v.findViewById(R.id.buttonId)
         }
-
-
+        
         return v;
     }
 
