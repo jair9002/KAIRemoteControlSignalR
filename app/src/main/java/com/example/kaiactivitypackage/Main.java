@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,6 +24,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.kairemotecontrolsignalr.R;
 import com.example.kairemotecontrolsignalr.SignalRConnect;
+
+import java.util.zip.Inflater;
 
 public class Main extends AppCompatActivity {
     public static final int REQUEST_CODE_AllPlay =101;
@@ -70,7 +73,7 @@ public class Main extends AppCompatActivity {
                 }
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-                alert.setTitle("IP 주소 입력");
+                alert.setTitle("네트워크 입력");
 
                 LinearLayout linearLayout = new LinearLayout(this);
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -79,6 +82,7 @@ public class Main extends AppCompatActivity {
                 linearLayout.addView(ipText);
 
                 final EditText address_input = new EditText(this);
+                //address_input.max;
                 linearLayout.addView(address_input);
 
                 final TextView portText = new TextView(this);
@@ -88,7 +92,12 @@ public class Main extends AppCompatActivity {
                 final EditText port_input = new EditText(this);
                 linearLayout.addView(port_input);
 
-                alert.setView(linearLayout);
+                LayoutInflater inflater = getLayoutInflater();
+                View v1 = inflater.inflate(R.layout.ip_port_alert, null);
+                EditText ip_editText = v1.findViewById(R.id.ip_editText);
+                EditText port_editText = v1.findViewById(R.id.port_editText);
+
+                alert.setView(v1);
 
                 alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -96,14 +105,18 @@ public class Main extends AppCompatActivity {
                         signalRConnect = new SignalRConnect();
                         //address_input.setText("172.30.1.63");
                         //port_input.setText("58486");
+
                         String ip_value = address_input.getText().toString();
                         String port_value = port_input.getText().toString();
+
 
 //                        if(ip_value ==null &&port_value == null){
 //                            signalRConnect.connect("172.30.1.146","58486");
 //                        }
+
                         boolean connect = signalRConnect.connect(ip_value,port_value);
                         //Toast.makeText(getActivity(),"인터넷이 연결되지 않음",Toast.LENGTH_SHORT).show();
+
                         if(connect) {
                             fm.beginTransaction().replace(R.id.controlFrmaeLayout, new MainFragment(signalRConnect)).commit();
                         }else Toast.makeText(getApplicationContext(),"인터넷이 연결되지 않음",Toast.LENGTH_SHORT).show();
@@ -150,10 +163,13 @@ public class Main extends AppCompatActivity {
                 fm.beginTransaction().replace(R.id.controlFrmaeLayout, new PlayFragment(signalRConnect)).commit();
                 break;
             }
-
         }
+    }// change_to_frame
 
-
-    }
+    public void stringResearch(String str){
+        for(int i=0;i<str.length();i++){
+            str.charAt(i);
+        }
+    }//stringResearch end
 
 }
