@@ -85,7 +85,8 @@ public class ScenarioPlay extends Fragment {
         for(int i=0;i<3;i++) {
             if (scenarioBtn == scenarioButton[i]){
                 scenarioBtn.setTextColor(Color.BLACK);
-                scenarioBtn.setBackgroundColor(Color.WHITE);
+                //scenarioBtn.setBackgroundColor(Color.WHITE);
+                scenarioBtn.setBackground();
                 continue;
             }
             scenarioButton[i].setTextColor(Color.WHITE);

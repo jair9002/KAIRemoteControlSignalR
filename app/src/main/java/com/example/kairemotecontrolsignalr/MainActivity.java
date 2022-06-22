@@ -78,22 +78,22 @@ public class MainActivity extends AppCompatActivity {
 
                 alert.setTitle("네트워크 입력");
 
-                LinearLayout linearLayout = new LinearLayout(this);
-                linearLayout.setOrientation(LinearLayout.VERTICAL);
-                final TextView ipText = new TextView(this);
-                ipText.setText("IP Address");
-                linearLayout.addView(ipText);
-
-                final EditText address_input = new EditText(this);
-                //address_input.max;
-                linearLayout.addView(address_input);
-
-                final TextView portText = new TextView(this);
-                portText.setText("Port");
-                linearLayout.addView(portText);
-
-                final EditText port_input = new EditText(this);
-                linearLayout.addView(port_input);
+//                LinearLayout linearLayout = new LinearLayout(this);
+//                linearLayout.setOrientation(LinearLayout.VERTICAL);
+//                final TextView ipText = new TextView(this);
+//                ipText.setText("IP Address");
+//                linearLayout.addView(ipText);
+//
+//                final EditText address_input = new EditText(this);
+//                //address_input.max;
+//                linearLayout.addView(address_input);
+//
+//                final TextView portText = new TextView(this);
+//                portText.setText("Port");
+//                linearLayout.addView(portText);
+//
+//                final EditText port_input = new EditText(this);
+//                linearLayout.addView(port_input);
 
                 LayoutInflater inflater = getLayoutInflater();
                 View v1 = inflater.inflate(R.layout.ip_port_alert, null);
@@ -109,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
                         //address_input.setText("172.30.1.63");
                         //port_input.setText("58486");
 
-                        String ip_value = address_input.getText().toString();
-                        String port_value = port_input.getText().toString();
+                        String ip_value = ip_editText.getText().toString();
+                        String port_value = port_editText.getText().toString();
 
 
 //                        if(ip_value ==null &&port_value == null){

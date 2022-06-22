@@ -27,6 +27,7 @@ import com.example.kairemotecontrolsignalr.SignalRConnect;
 
 import java.util.zip.Inflater;
 
+//이제 더이상 쓰이지 않음
 public class Main extends AppCompatActivity {
     public static final int REQUEST_CODE_AllPlay =101;
     public static final int REQUEST_CODE_ScenarioPlay =102;
